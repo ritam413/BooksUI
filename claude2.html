@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY Collection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.js"></script>
+    <style>
+        .dropdown {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s ease-in-out;
+        }
+
+        .dropdown.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            z-index: 10;
+        }
+
+        .tab-hover {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .tab-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-tag {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .filter-tag:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-container {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .search-container:focus-within {
+            transform: scale(1.02);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .hover-ring::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+            border-radius: 40% 60% 70% 30% / 30% 40% 60% 70%;
+            /* Irregular shape */
+            background: radial-gradient(ellipse at center, rgba(180, 100, 255, 0.25), rgba(100, 0, 150, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(30px);
+        }
+
+        .hover-ring:hover::before {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body class=" bg-gradient-to-b from-black to-purple-900 min-h-screen">
+    <!-- Header -->
+
+    <div class="sticky top-0  py-6 shadow-md">
+        <div class="bg-gray-100 rounded-lg mx-auto py-4 text-center w-[70%]">
+            <h1 class="text-gray-800 font-semibold text-xl">Welcome To MY Collection</h1>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="flex justify-center mt-8 space-x-0">
+            <button id="allBtn"
+                class="hover-ring tab-hover bg-transparent text-white px-8 py-3 font-bold tracking-wide text-lg hover:text-orange-400 ">ALL</button>
+            <button id="ongoingBtn"
+                class=" hover-ring tab-hover bg-transparent text-white px-8 py-3 font-bold tracking-wide text-lg hover:text-orange-400 ">ONGOING</button>
+            <button id="completedBtn"
+                class=" hover-ring tab-hover bg-transparent text-white px-8 py-3 font-bold tracking-wide text-lg hover:text-orange-400 ">COMPLETED</button>
+            <button id="nabtn"
+                class=" hover-ring tab-hover bg-transparent text-white px-8 py-3 font-bold tracking-wide text-lg hover:text-orange-400 ">N/A</button>
+        </div>
+
+        <!-- Main Content Container -->
+        <div class="bg-white mx-4 mt-8 rounded-lg p-6">
+            <!-- Search Bar -->
+            <div class="search-container bg-gray-200 rounded-full px-6 py-3 mb-6 flex items-center">
+                <input id="serachBar" type="text" placeholder="Search"
+                    class="flex-1 bg-transparent outline-none text-gray-600 placeholder-gray-400 text-lg">
+                <i data-lucide="search" class="w-6 h-6 text-gray-400"></i>
+            </div>
+
+            <!-- Filters -->
+            <div id="filterOptions" class="flex flex-wrap items-center gap-3 mb-8">
+                <span class="text-gray-700 font-medium mr-2">Filters :</span>
+                <span
+                    class="filter-tag bg-gray-600 text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer">Horror
+                    ×</span>
+                <span
+                    class="filter-tag bg-gray-600 text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer">Thriller
+                    ×</span>
+                <span
+                    class="filter-tag bg-gray-600 text-white px-3 py-2 rounded-full text-sm font-medium cursor-pointer">Gore
+                    ×</span>
+                <span
+                    class="filter-tag bg-gray-600 text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer">Fantasy
+                    ×</span>
+                <span
+                    class="filter-tag bg-gray-600 text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer">Comedy
+                    ×</span>
+                <span
+                    class="filter-tag bg-gray-600 text-white px-4 py-2 rounded-full text-sm font-medium cursor-pointer">Manga
+                    ×</span>
+            </div>
+
+            <!-- Modal reLated -->
+            <button id="openModalBtn" class="fixed z-50 top-4 right-4 bg-orange-500 text-white px-4 py-2 text-2xl rounded-xl shadow-lg 
+            flex items-center justify-center hover:bg-orange-200 transition">
+                +
+            </button>
+
+            <!-- Modal Container -->
+            <div id="bookModal"
+                class=" hidden inset-0 bg-black bg-opacity-50  min-w-full min-h-screen fixed justify-center items-center z-50">
+                <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-lg">
+                    <h2 class="text-2xl font-bold mb-4">Add a New Book</h2>
+
+                    <!-- Form Elements -->
+                    <form class="space-y-4">
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1">Book Name</label>
+                            <input type="text"
+                                class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1">Tags</label>
+                            <input type="text" placeholder="Comma separated"
+                                class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1">Description</label>
+                            <textarea
+                                class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                rows="4"></textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-gray-700 font-medium mb-1">Cover Image URL</label>
+                            <input type="url"
+                                class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="flex justify-end space-x-2 pt-4">
+                            <button id="cancel" type="button"
+                                class="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition">Cancel</button>
+                            <button type="submit"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <!-- Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4"
+                id="CardContainer">
+                <div id="Card" name="na"
+                    class="card-hover bg-white border-4 border-blue-500 p-1 rounded-lg overflow-hidden relative">
+                    <img src="http://images.pexels.com/photos/6770610/pexels-photo-6770610.jpeg"
+                        alt="The Mending Diaries" class="w-full h-48 object-cover">
+                    <div class="p-3">
+                        <h3 class="font-medium text-gray-800 text-sm mb-2">The Mending Diaries</h3>
+                        <span class="bg-slate-200 text-blue-600  px-3 py-1 rounded text-xs font-extrabold">N/A</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="module" src="script.js"></script>
+        <script>
+            // Initialize Lucide icons
+            // document.addEventListener('DOMContentLoaded', () => {
+            //     lucide.createIcons();
+            // });
+
+
+            // Dropdown functionality
+            function toggleDropdown(button) {
+                const dropdown = button.parentElement.querySelector('.dropdown');
+                const allDropdowns = document.querySelectorAll('.dropdown');
+
+                // Close all other dropdowns
+                allDropdowns.forEach(d => {
+                    if (d !== dropdown) {
+                        d.classList.remove('show');
+                    }
+                });
+
+                // Toggle current dropdown
+                dropdown.classList.toggle('show');
+            }
+
+            // Change status functionality
+            function changeStatus(button, newStatus, newStatusClass, newBorderClass) {
+                const card = button.closest('.card-hover');
+                const statusSpan = card.querySelector('span[class*="bg-"]');
+                const dropdown = card.querySelector('.dropdown');
+
+                // Update status text and styling
+                statusSpan.textContent = newStatus;
+                statusSpan.className = `px-3 py-1 rounded text-xs font-bold ${newStatusClass}`;
+
+                // Update card border
+                card.className = card.className.replace(/border-\w+-\d+/, newBorderClass);
+
+                // Close dropdown
+                dropdown.classList.remove('show');
+            }
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('.dropdown-trigger') && !e.target.closest('.dropdown')) {
+                    document.querySelectorAll('.dropdown').forEach(dropdown => {
+                        dropdown.classList.remove('show');
+                    });
+                }
+            });
+        </script>
+</body>
+
+</html>
