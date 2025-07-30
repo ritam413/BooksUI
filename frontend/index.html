@@ -200,55 +200,6 @@
             </div>
         </div>
         <script type="module" src="script.js"></script>
-        <script>
-            // Initialize Lucide icons
-            // document.addEventListener('DOMContentLoaded', () => {
-            //     lucide.createIcons();
-            // });
-
-
-            // Dropdown functionality
-            function toggleDropdown(button) {
-                const dropdown = button.parentElement.querySelector('.dropdown');
-                const allDropdowns = document.querySelectorAll('.dropdown');
-
-                // Close all other dropdowns
-                allDropdowns.forEach(d => {
-                    if (d !== dropdown) {
-                        d.classList.remove('show');
-                    }
-                });
-
-                // Toggle current dropdown
-                dropdown.classList.toggle('show');
-            }
-
-            // Change status functionality
-            function changeStatus(button, newStatus, newStatusClass, newBorderClass) {
-                const card = button.closest('.card-hover');
-                const statusSpan = card.querySelector('span[class*="bg-"]');
-                const dropdown = card.querySelector('.dropdown');
-
-                // Update status text and styling
-                statusSpan.textContent = newStatus;
-                statusSpan.className = `px-3 py-1 rounded text-xs font-bold ${newStatusClass}`;
-
-                // Update card border
-                card.className = card.className.replace(/border-\w+-\d+/, newBorderClass);
-
-                // Close dropdown
-                dropdown.classList.remove('show');
-            }
-
-            // Close dropdowns when clicking outside
-            document.addEventListener('click', function (e) {
-                if (!e.target.closest('.dropdown-trigger') && !e.target.closest('.dropdown')) {
-                    document.querySelectorAll('.dropdown').forEach(dropdown => {
-                        dropdown.classList.remove('show');
-                    });
-                }
-            });
-        </script>
 </body>
 
 </html>
