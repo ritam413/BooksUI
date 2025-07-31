@@ -51,7 +51,7 @@ export const uploadBook = async (req, res) => {
 
             //creates a temporary filename for saving locally 
             const tempPath = `./public/temp/temp_${Date.now()}${ext}`;
-            
+
             // response.data is the raw image binary that we get from arraybuffer 
             fs.writeFileSync(tempPath, axiosresponse.data)
 
@@ -76,11 +76,11 @@ export const uploadBook = async (req, res) => {
             description,
             image: finalimageUrl,
         })
-
-        res.status(201).json({ success: true, data: book })
+        console.log("✅ Successfully saved book to DB and responding to client");
+        return  res.status(201).json({ success: true, data: book })
     } catch (error) {
         console.log(`Upload Error`, error);
-        res.status(500).json({ success: false, message: "SerVer Error" })
+        return res.status(500).json({ success: false, message: "SerVer Error" })
     }
 }
 

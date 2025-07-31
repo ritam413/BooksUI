@@ -1,4 +1,6 @@
 
+import { formSubmision } from "./utils/connectBackend.js";
+
 const allcard = [
   {
     title: "Attack on Titan",
@@ -103,7 +105,7 @@ const completedBtn = document.getElementById('completedBtn')
 
 // ----------Resuable Styles ---------
 const styleDivCard = "card-hover bg-white border-4  p-1 rounded-lg overflow-hidden relative"
-const styleImgTag = "w-full h-48 object-cover"
+const styleImgTag = "w-full rounded-md h-48 object-cover"
 const styleh3TitleBook = "font-medium text-gray-800 text-md mb-2"
 const styleStateSpan = "bg-slate-200 mt-2  px-3 py-1 rounded text-xs font-extrabold"
 const styleDescription = "text-sm text-gray-500 font-medium leading-snug mt-2 line-clamp-3 mb-3"
@@ -210,7 +212,7 @@ serachInput.addEventListener('input', (e) => {
 //
 
 
-// this is the functionlity of the modal classs
+//---- FUNCTIONLITY of the MODAL classs-----
 //-----DOM ELEMENTS of Modal -------
 const openModalButton = document.getElementById('openModalBtn')
 const modalcontainer = document.getElementById('bookModal')
@@ -228,3 +230,126 @@ cancelBtn.addEventListener('click', () => {
 })
 
 
+// TOGGLE URL/FILE Options
+const form = document.getElementById('uploadForm')
+let usingFile = true;
+const toggleBtn = document.getElementById('toggleInput')
+
+toggleBtn.addEventListener('click',()=>{
+
+  usingFile = !usingFile;
+
+
+  const fileInput = document.getElementById('imageFile')
+  const urlInput = document.getElementById('imageUrl')
+
+  if(usingFile){
+    fileInput.classList.remove('hidden')
+    urlInput.classList.add('hidden')
+    toggleBtn.textContent= "Use URL"
+  } else {
+    fileInput.classList.add('hidden')
+    urlInput.classList.remove('hidden')
+    toggleBtn.textContent= "Use File"
+  }
+})
+
+formSubmision(form)
+
+// now for submitting form 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // if(usingFile){
+    
+  //   // use FormData when uploading a file
+  //   const formData = new FormData(form)
+
+  //   response = await fetch("http://localhost:5000/api/v1/books/upload",{
+  //     method:"POST",
+  //     body: formData,
+  //   })
+  // }else{
+  //   //use JSON   when sending a url
+  //   const jasonBody = {
+  //     title: form.title.value,
+  //     tags: form.tags.value,
+  //     description:form.description.value,
+  //     imageUrl: document.getElementById("imageUrl").value
+  //   };
+
+  //   response = await fetch("http://localhost:5000/api/book/upload",{
+  //     method:'POST',
+  //     headers:{
+  //       "Content-Type":"application/json"
+  //     },
+  //     body:JSON.stringify(jasonBody),
+  //   })
+  // }
