@@ -101,6 +101,9 @@ const allCardBtn = document.getElementById('allBtn')
 const ongoinBtn = document.getElementById('ongoingBtn')
 const naBtn = document.getElementById('nabtn')
 const completedBtn = document.getElementById('completedBtn')
+const stateSpan = document.getElementById('stateSpan')
+const stateDropdown = document.getElementById('stateDropdown')
+
 
 // ----------Resuable Styles ---------
 const styleDivCard = "card-hover bg-white border-4  p-1 rounded-lg overflow-hidden relative"
@@ -113,7 +116,7 @@ const styleTagDiv = 'mt-2 flex flex-wrap  gap-2 overflow-hidden'
 
 
 // --------- Reusable Render Function ------
-function renderCards(cards) {
+function  renderCards(cards) {
   cardGrid.innerHTML = '';
   cards.forEach(card => {
     if (!card.title || !card.image || !card.state) {
@@ -124,6 +127,12 @@ function renderCards(cards) {
     const div = document.createElement('div')
     div.classList.add('Card', ...styleDivCard.split(/\s+/))
     div.setAttribute('name', card.state)
+
+    // ✅ Set the MongoDB ID for patching later
+    if (card._id) {
+      div.dataset.bookId = card._id;
+    }
+
 
     // this is the image in the skeleton
     const image = document.createElement('img')
@@ -154,31 +163,114 @@ function renderCards(cards) {
       divTags.appendChild(span)
     })
 
-    // this is the stateSpan , child of the informationbookdiv
-    const stateSpan = document.createElement('span')
-    stateSpan.classList.add(...styleStateSpan.split(/\s+/))
-    stateSpan.textContent = card.state
+    // Create the outer container div
+      const container = document.createElement('div');
+      container.className = 'relative inline-block';
+    // Create the clickable span
+      const stateSpan = document.createElement('span');
+      stateSpan.id = 'stateSpan';
+      stateSpan.className = 'cursor-pointer px-2 py-1 bg-gray-200 rounded-lg';
+      stateSpan.textContent = card.state || 'N/A';
+      // Apply style based on current state during render
+      switch (card.state) {
+        case 'ONGOING':
+          div.classList.add('border-green-500');
+          stateSpan.classList.add('text-green-600');
+          break;
+        case 'COMPLETED':
+          div.classList.add('border-red-500');
+          stateSpan.classList.add('text-red-600');
+          break;
+        case 'N/A':
+          div.classList.add('border-blue-500');
+          stateSpan.classList.add('text-blue-600');
+          break;
+      }
+    // Create the dropdown <ul>
+      const stateDropdown = document.createElement('ul');
+      stateDropdown.id = 'stateDropdown';
+      stateDropdown.className = 'hidden absolute mb-2 bottom-full w-32 bg-white border rounded shadow-lg z-10';
+
+    // Dropdown options
+     const states = ['N/A', 'ONGOING', 'COMPLETED'];
+
+    states.forEach(state => {
+      const li = document.createElement('li');
+      li.className = 'dropdown-item px-2 py-1 hover:bg-gray-100 cursor-pointer z-50';
+      li.textContent = state;
+
+    // Optional: update span text and hide dropdown when selecting an option
+      li.addEventListener('click',async()=> {
+        
+        //Updating the state of the Card
+        const newState = state;
+        stateSpan.textContent = newState
+        stateDropdown.classList.add('hidden');
+         
+        // Reset and reapply styles
+            div.classList.remove('border-green-500', 'border-red-500', 'border-blue-500');
+            stateSpan.classList.remove('text-green-600', 'text-red-600', 'text-blue-600');
+        
+        // can also call any filter function here
+        // ✅ 2. Border and Color Styling
+          switch (newState) {
+          case 'ONGOING':
+            
+            div.classList.add('border-green-500');
+            stateSpan.classList.add('text-green-600');
+            break;
+          case 'COMPLETED':
+            div.classList.add('border-red-500');
+            stateSpan.classList.add('text-red-600');
+            break;
+          default:
+            div.classList.add('border-blue-500');
+            stateSpan.classList.add('text-blue-600');
+        }
 
 
-    // ✅ 2. Border and Color Styling
-    switch (card.state) {
-      case 'ONGOING':
-        div.classList.add('border-green-500');
-        stateSpan.classList.add('text-green-600');
-        break;
-      case 'COMPLETED':
-        div.classList.add('border-red-500');
-        stateSpan.classList.add('text-red-600');
-        break;
-      default:
-        div.classList.add('border-blue-500');
-        stateSpan.classList.add('text-blue-600');
-    }
+        // send Update request to Backend
+            const bookId = div.dataset.bookId;
+          try {
+            const res = await fetch(`http://localhost:5000/api/v1/books/${bookId}`,{
+              method:'PATCH',
+              headers:{
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({newState})
+            })
+
+            const result = await res.json();
+
+            if (!res.ok) {
+              const text = await res.text();
+              console.error("Server returned error:", text);
+              return;
+            }
+          } catch (error) {
+            console.error('Error while Updating State',error)
+          }
+     });
+
+      stateDropdown.appendChild(li);
+    });
+    
+    // Append span and ul to the container
+      container.appendChild(stateSpan);
+      container.appendChild(stateDropdown);
+
+
+    // Toggle dropdown visibility on span click
+    stateSpan.addEventListener('click', () => {
+    stateDropdown.classList.toggle('hidden');
+    });
+  
+    
 
     informationBookdiv.appendChild(h3)
     informationBookdiv.appendChild(p)
     informationBookdiv.appendChild(divTags)
-    informationBookdiv.appendChild(stateSpan)
+    informationBookdiv.appendChild(container)
 
     div.appendChild(image)
     div.appendChild(informationBookdiv)
@@ -191,17 +283,16 @@ function renderCards(cards) {
 // document.addEventListener('DOMContentLoaded', () => renderCards(allcard))
 document.addEventListener('DOMContentLoaded', async () => {
 
-  renderCards(allcard)
 
   try {
     const res = await fetch("http://localhost:5000/api/v1/books/files");
     const { success, data } = await res.json();
     if (!success) throw new Error("Failed to load books");
     
-   
-   allcard.push(...data)
+    allcard.length = 0; // Clear dummy cards
+    allcard.push(...data)
 
-   renderCards(allcard)
+     renderCards(allcard)
     
     
   } catch (err) {

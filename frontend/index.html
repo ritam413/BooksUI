@@ -147,29 +147,22 @@
                     <h2 class="text-2xl font-bold mb-4">Add a New Book</h2>
 
                     <!-- Form Elements -->
-                    <form 
-                    id="uploadForm"
-                    class="space-y-4">
+                    <form id="uploadForm" class="space-y-4">
                         <div>
                             <label class="block text-gray-700 font-medium mb-1">Book Name</label>
-                            <input
-                                id="title"
-                                type="text"
+                            <input id="title" type="text"
                                 class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
                         </div>
 
                         <div>
                             <label class="block text-gray-700 font-medium mb-1">Tags</label>
-                            <input
-                                id="tags"
-                                type="text" placeholder="Comma separated"
+                            <input id="tags" type="text" placeholder="Comma separated"
                                 class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
                         </div>
 
                         <div>
                             <label class="block text-gray-700 font-medium mb-1">Description</label>
-                            <textarea
-                                id="description"
+                            <textarea id="description"
                                 class="w-full border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                                 rows="4"></textarea>
                         </div>
@@ -210,7 +203,12 @@
                     <div class="p-3">
                         <h3 class="font-medium text-gray-800 text-sm mb-2">The Mending Diaries</h3>
                         <p id="description"></p>
-                        <span class="bg-slate-200 text-blue-600  px-3 py-1 rounded text-xs font-extrabold">N/A</span>
+                        <span id="stateSpan" class="cursor-pointer px-3 py-2 bg-gray-200 rounded-lg">All</span>
+                        <ul id="stateDropdown" class="hidden absolute mt-2 w-32 bg-white border rounded shadow-lg z-10">
+                            <li class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer">All</li>
+                            <li class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer">Completed</li>
+                            <li class="dropdown-item px-4 py-2 hover:bg-gray-100 cursor-pointer">Ongoing</li>
+                        </ul>
                     </div>
                 </div>
             </div>

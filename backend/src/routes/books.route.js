@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { upload } from "../middlewares/multer.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { uploadBook, getAllBooks } from "../controllers/book.controller.js";
+import { uploadBook, getAllBooks , updateBookState } from "../controllers/book.controller.js";
 import app from '../app.js'
 const router = Router()
 router.post(
@@ -23,5 +23,9 @@ router.get(
     "/files",
     asyncHandler(getAllBooks)
 )
+
+// PATCH /api/v1/books/:id
+router.patch(
+  '/:id',updateBookState);
 
 export default router

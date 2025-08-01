@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import axios from 'axios'
 import { uploadResultonCloudinary } from "../utils/cloudinary.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 export const uploadBook = async (req, res) => {
 
@@ -99,3 +100,20 @@ export const getAllBooks = async (req, res) => {
     const books = await Books.find();
     res.json({ success: true, data: books })
 }
+
+export const updateBookState = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { newState } = req.body;
+
+  const updatedBook = await Books.findByIdAndUpdate(
+    id,
+    { state: newState },
+    { new: true }
+  );
+
+  if (!updatedBook) {
+    return res.status(404).json({ success: false, message: 'Book not found' });
+  }
+
+  res.status(200).json({ success: true, data: updatedBook });
+});

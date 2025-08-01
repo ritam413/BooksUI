@@ -18,8 +18,6 @@ export function formSubmision(form) {
             const hasImageUrl = imageUrl.trim().length > 0;
     
             try {
-                
-    
                 if (hasFile) {
                     // ✅ Send multipart/form-data
                     const Data = new FormData();
