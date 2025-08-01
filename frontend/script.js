@@ -95,7 +95,6 @@ const allcard = [
   }
 ];
 
-
 // ----- DOM ELEMENTS ------
 const cardGrid = document.getElementById('CardContainer')
 const allCardBtn = document.getElementById('allBtn')
@@ -188,7 +187,30 @@ function renderCards(cards) {
 }
 
 // Button Event Listener (Filter NA COMPLETED ONGOING)
-document.addEventListener('DOMContentLoaded', () => renderCards(allcard))
+
+// document.addEventListener('DOMContentLoaded', () => renderCards(allcard))
+document.addEventListener('DOMContentLoaded', async () => {
+
+  renderCards(allcard)
+
+  try {
+    const res = await fetch("http://localhost:5000/api/v1/books/files");
+    const { success, data } = await res.json();
+    if (!success) throw new Error("Failed to load books");
+    
+   
+   allcard.push(...data)
+
+   renderCards(allcard)
+    
+    
+  } catch (err) {
+    console.error("Error fetching books:", err);
+    alert("Could not load books from backend.");
+  }
+});
+
+
 allCardBtn.addEventListener('click', () => renderCards(allcard))
 ongoinBtn.addEventListener('click', () => renderCards(allcard.filter(c => c.state === "ONGOING"
 )))
