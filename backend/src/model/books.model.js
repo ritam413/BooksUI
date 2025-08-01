@@ -14,6 +14,9 @@ const  BooksSchema  = new Schema({
         type:String,
         required:true
     },
+    description:{
+        type:String,
+    },
     state: {
     type:String,
     enum:['ONGOING','COMPLETED','N/A'],

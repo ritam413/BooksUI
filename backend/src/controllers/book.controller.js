@@ -30,7 +30,9 @@ export const uploadBook = async (req, res) => {
 
             finalimageUrl = fileResult.secure_url
 
-        } else if (image) {
+           
+        } else if (image) 
+        {
             // if image url is provided , download to localdisk then  upload to cloudinary
 
             //this line downloads image from a URL
@@ -64,7 +66,8 @@ export const uploadBook = async (req, res) => {
             } catch (err) {
                 console.warn('Failed to delete temp file:', err.message);
             }
-        } else {
+        } 
+        else {
             return res.status(400).json({ success: false, message: "No file uploaded" });
         }
 
@@ -76,8 +79,15 @@ export const uploadBook = async (req, res) => {
             description,
             image: finalimageUrl,
         })
+
         console.log("✅ Successfully saved book to DB and responding to client");
-        return  res.status(201).json({ success: true, data: book })
+
+        return res.status(200).json({
+            success: true,
+            message: "Book Uploaded Succesfully",
+            data:book
+        })
+       
     } catch (error) {
         console.log(`Upload Error`, error);
         return res.status(500).json({ success: false, message: "SerVer Error" })
