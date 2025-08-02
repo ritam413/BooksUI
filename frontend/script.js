@@ -232,7 +232,8 @@ function  renderCards(cards) {
         // send Update request to Backend
             const bookId = div.dataset.bookId;
           try {
-            const res = await fetch(`http://localhost:5000/api/v1/books/${bookId}`,{
+            // const res = await fetch(`http://localhost:5000/api/v1/books/${bookId}`,{
+            const res = await fetch(`https://booksui.onrender.com/books/${bookId}`,{
               method:'PATCH',
               headers:{
                 'Content-Type': 'application/json',
@@ -285,7 +286,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
   try {
-    const res = await fetch("http://localhost:5000/api/v1/books/files");
+    // const res = await fetch("http://localhost:5000/api/v1/books/files");
+    const res = await fetch("https://booksui.onrender.com/books/files");
     const { success, data } = await res.json();
     if (!success) throw new Error("Failed to load books");
     

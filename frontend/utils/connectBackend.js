@@ -29,7 +29,8 @@ export function formSubmision(form) {
     
                     console.log("Sending request...");
                     try {
-                        const response = await fetch("http://localhost:5000/api/v1/books/upload", {
+                        // const response = await fetch("http://localhost:5000/api/v1/books/upload", {
+                        const response = await fetch("https://booksui.onrender.com/books/upload", {
                             method: "POST",
                             body: Data
                         })
@@ -53,7 +54,8 @@ export function formSubmision(form) {
                     };
                     let response ;
                     console.log("Sending request...");
-                    response = await fetch("http://localhost:5000/api/v1/books/upload", {
+                    // response = await fetch("http://localhost:5000/api/v1/books/upload", {
+                    response = await fetch("https://booksui.onrender.com/books/upload", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json"
