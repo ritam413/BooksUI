@@ -7,7 +7,7 @@ const allowedOrigins = process.env.CORS_ORIGIN.split(",");
 
 app.use(cors({
     // origin:'http://127.0.0.1:3000',
-    origin:'https://prbooks.netlify.app/',
+    origin:'https://prbooks.netlify.app',
     credentials: true
 }))
 // app.use(cors({
