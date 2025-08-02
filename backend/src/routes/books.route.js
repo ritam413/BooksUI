@@ -24,7 +24,8 @@ router.get(
     asyncHandler(getAllBooks)
 )
 
-// PATCH /api/v1/books/:id
+// PATCH /api/v1/books/:id // for development 
+// PATCH /books/:id // for production
 router.patch(
   '/:id',updateBookState);
 

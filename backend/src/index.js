@@ -28,4 +28,6 @@ connectDB()
 })
 
 
-app.use('/api/v1/books',uploadRoutes)
+app.use('/api/v1/books',uploadRoutes)//this is for development
+
+// app.use('/books',uploadRoutes)//this is for development 

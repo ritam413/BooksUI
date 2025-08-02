@@ -169,7 +169,7 @@ function  renderCards(cards) {
     // Create the clickable span
       const stateSpan = document.createElement('span');
       stateSpan.id = 'stateSpan';
-      stateSpan.className = 'cursor-pointer px-2 py-1 bg-gray-200 rounded-lg';
+      stateSpan.className = 'cursor-pointer px-2 py-1 bg-gray-200 font-semibold text-sm rounded-lg';
       stateSpan.textContent = card.state || 'N/A';
       // Apply style based on current state during render
       switch (card.state) {
@@ -189,14 +189,14 @@ function  renderCards(cards) {
     // Create the dropdown <ul>
       const stateDropdown = document.createElement('ul');
       stateDropdown.id = 'stateDropdown';
-      stateDropdown.className = 'hidden absolute mb-2 bottom-full w-32 bg-white border rounded shadow-lg z-10';
+      stateDropdown.className = 'hidden absolute mb-2 bottom-full text-sm w-32 bg-white border rounded shadow-lg z-10';
 
     // Dropdown options
      const states = ['N/A', 'ONGOING', 'COMPLETED'];
 
     states.forEach(state => {
       const li = document.createElement('li');
-      li.className = 'dropdown-item px-2 py-1 hover:bg-gray-100 cursor-pointer z-50';
+      li.className = 'dropdown-item px-2 py-1 hover:bg-gray-100 text-sm cursor-pointer z-50';
       li.textContent = state;
 
     // Optional: update span text and hide dropdown when selecting an option
@@ -302,13 +302,36 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 
-allCardBtn.addEventListener('click', () => renderCards(allcard))
-ongoinBtn.addEventListener('click', () => renderCards(allcard.filter(c => c.state === "ONGOING"
-)))
-completedBtn.addEventListener('click', () => renderCards(allcard.filter(c => c.state === "COMPLETED"
-)))
-naBtn.addEventListener('click', () => renderCards(allcard.filter(c => c.state === "N/A"
-)))
+allCardBtn.addEventListener('click', () => {
+  allCardBtn.classList.add('text-orange-400')
+  naBtn.classList.remove("text-blue-400")
+  ongoinBtn.classList.remove("text-green-400")
+  completedBtn.classList.remove("text-red-400")
+  renderCards(allcard)
+})
+ongoinBtn.addEventListener('click', () => {
+  ongoinBtn.classList.add("text-green-400")
+  allCardBtn.classList.remove('text-orange-400')
+  naBtn.classList.remove("text-blue-400")
+  completedBtn.classList.remove("text-red-400")
+  renderCards(allcard.filter(c => c.state === "ONGOING"))
+})
+completedBtn.addEventListener('click', () => 
+  { 
+    completedBtn.classList.add("text-red-400")
+    allCardBtn.classList.remove('text-orange-400')
+    ongoinBtn.classList.remove("text-green-400")
+    naBtn.classList.remove("text-blue-400")
+    renderCards(allcard.filter(c => c.state === "COMPLETED"))
+  }
+)
+naBtn.addEventListener('click', () => {
+  naBtn.classList.add("text-blue-400")
+  allCardBtn.classList.remove('text-orange-400')
+  ongoinBtn.classList.remove("text-green-400")
+  completedBtn.classList.remove("text-red-400")
+  renderCards(allcard.filter(c => c.state === "N/A"))
+})
 //
 
 // Now searching with Name of the Book fucntionality 
@@ -367,9 +390,11 @@ toggleBtn.addEventListener('click',()=>{
   }
 })
 
-formSubmision(form)
 
 // now for submitting form 
+formSubmision(form)
+
+
 
 
 
